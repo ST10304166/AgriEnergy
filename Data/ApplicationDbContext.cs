@@ -1,4 +1,5 @@
 ﻿using AgriEnergy.Models;
+using AgriEnergy.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace AgriEnergy.Data
@@ -19,7 +20,7 @@ namespace AgriEnergy.Data
                     Id = 1,
                     Name = "John Doe",
                     Email = "farmer1@example.com",
-                    Password = "password123",
+                    Password = PasswordHasher.HashPassword("password123"), // Updated
                     Address = "Farm 1, Region A",
                     PhoneNumber = "0101234567",
                     RegistrationDate = DateTime.Now
@@ -31,7 +32,7 @@ namespace AgriEnergy.Data
                     Id = 1,
                     Name = "Jane Admin",
                     Email = "admin@example.com",
-                    Password = "admin123",
+                    Password = PasswordHasher.HashPassword("admin123"), // Updated
                     Role = "Employee"
                 });
 

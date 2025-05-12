@@ -1,4 +1,5 @@
 ﻿using AgriEnergy.Data;
+using AgriEnergy.Utilities;
 using AgriEnergy.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
@@ -32,23 +33,23 @@ namespace AgriEnergy.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var farmer = await _context.Farmers
-                .FirstOrDefaultAsync(f => f.Email == model.Email && f.Password == model.Password);
-            if (farmer != null)
+            // Check farmer login
+            var farmer = await _context.Farmers.FirstOrDefaultAsync(f => f.Email == model.Email);
+            if (farmer != null && PasswordHasher.VerifyPassword(model.Password, farmer.Password))
             {
                 await SignInUser(farmer.Id.ToString(), farmer.Name, farmer.Email, "Farmer");
                 return RedirectToAction("MyProducts", "Products");
             }
 
-            var employee = await _context.Employees
-                .FirstOrDefaultAsync(e => e.Email == model.Email && e.Password == model.Password);
-            if (employee != null)
+            // Check employee login
+            var employee = await _context.Employees.FirstOrDefaultAsync(e => e.Email == model.Email);
+            if (employee != null && PasswordHasher.VerifyPassword(model.Password, employee.Password))
             {
                 await SignInUser(employee.Id.ToString(), employee.Name, employee.Email, "Employee");
                 return RedirectToAction("Dashboard", "Employee");
             }
 
-            ModelState.AddModelError("", "Invalid login.");
+            ModelState.AddModelError("", "Invalid login attempt.");
             return View(model);
         }
 
