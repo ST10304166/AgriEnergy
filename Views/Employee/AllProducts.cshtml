@@ -1,0 +1,33 @@
+﻿@model IEnumerable<AgriEnergy.Models.Product>
+@{
+    ViewData["Title"] = "All Products";
+}
+
+<h2>All Products</h2>
+
+<form method="get">
+    <input type="text" name="searchString" placeholder="Search by name..." class="form-control mb-2" />
+    <input type="submit" value="Search" class="btn btn-primary mb-3" />
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Date</th>
+            <th>Farmer</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Category</td>
+                <td>@item.ProductionDate.ToShortDateString()</td>
+                <td>@item.Farmer.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>
