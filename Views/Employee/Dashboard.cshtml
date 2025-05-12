@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<AgriEnergy.Models.Farmer>
+@{
     ViewData["Title"] = "Dashboard";
 }
 
@@ -8,3 +9,30 @@
     <li><a asp-controller="Farmers" asp-action="Create">Add New Farmer</a></li>
     <li><a asp-controller="Employee" asp-action="AllProducts">View All Products</a></li>
 </ul>
+
+<hr />
+<h3>Registered Farmers</h3>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Registration Date</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var farmer in Model)
+    {
+        <tr>
+            <td>@farmer.Name</td>
+            <td>@farmer.Email</td>
+            <td>@farmer.PhoneNumber</td>
+            <td>@farmer.Address</td>
+            <td>@farmer.RegistrationDate.ToShortDateString()</td>
+        </tr>
+    }
+    </tbody>
+</table>

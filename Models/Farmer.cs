@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace AgriEnergy.Models
 {
@@ -20,6 +21,7 @@ namespace AgriEnergy.Models
 
         public string Role { get; set; } = "Farmer";
 
+        [ValidateNever]
         public ICollection<Product> Products { get; set; }
     }
 }

@@ -25,16 +25,27 @@ namespace AgriEnergy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Farmer farmer)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                farmer.Role = "Farmer";
-                farmer.RegistrationDate = DateTime.Now;
-                _context.Farmers.Add(farmer);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Dashboard", "Employee");
+                // 🔍 Log model validation errors to console for debugging
+                foreach (var value in ModelState.Values)
+                {
+                    foreach (var error in value.Errors)
+                    {
+                        Console.WriteLine($"Validation error: {error.ErrorMessage}");
+                    }
+                }
+
+                // Return view again with validation messages
+                return View(farmer);
             }
 
-            return View(farmer);
+            farmer.Role = "Farmer";
+            farmer.RegistrationDate = DateTime.Now;
+            _context.Farmers.Add(farmer);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Dashboard", "Employee");
         }
     }
 }
