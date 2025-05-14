@@ -21,15 +21,24 @@ namespace AgriEnergy.Controllers
             return View(farmers);
         }
 
-        public async Task<IActionResult> AllProducts(string? search, string? category)
+        public async Task<IActionResult> AllProducts(string? searchString, string? category, DateTime? startDate, DateTime? endDate)
         {
             var products = _context.Products.Include(p => p.Farmer).AsQueryable();
 
-            if (!string.IsNullOrEmpty(search))
-                products = products.Where(p => p.Name.Contains(search));
+            // Filter by name
+            if (!string.IsNullOrEmpty(searchString))
+                products = products.Where(p => p.Name.Contains(searchString));
 
+            // Filter by category
             if (!string.IsNullOrEmpty(category))
                 products = products.Where(p => p.Category == category);
+
+            // Filter by date range
+            if (startDate.HasValue)
+                products = products.Where(p => p.ProductionDate >= startDate.Value);
+
+            if (endDate.HasValue)
+                products = products.Where(p => p.ProductionDate <= endDate.Value);
 
             return View(await products.ToListAsync());
         }
