@@ -1,5 +1,6 @@
 ﻿using AgriEnergy.Data;
 using AgriEnergy.Models;
+using AgriEnergy.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +28,6 @@ namespace AgriEnergy.Controllers
         {
             if (!ModelState.IsValid)
             {
-                // 🔍 Log model validation errors to console for debugging
                 foreach (var value in ModelState.Values)
                 {
                     foreach (var error in value.Errors)
@@ -35,13 +35,13 @@ namespace AgriEnergy.Controllers
                         Console.WriteLine($"Validation error: {error.ErrorMessage}");
                     }
                 }
-
-                // Return view again with validation messages
                 return View(farmer);
             }
 
+            farmer.Password = PasswordHasher.HashPassword(farmer.Password); // ✅ Hash password
             farmer.Role = "Farmer";
             farmer.RegistrationDate = DateTime.Now;
+
             _context.Farmers.Add(farmer);
             await _context.SaveChangesAsync();
 
